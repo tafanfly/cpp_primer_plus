@@ -49,4 +49,73 @@ C++ 命名规则如下：
 `字节(byte)`通常是指8位的内存单元， 1KB=1024byte, 1MB=1024KB.
 
 sizeof运算符返回类型或变量的长度，单位为字节。
+对类型名（如int）使用sizeof 时，int需要放在括号里，但对于变量名（n_short）使用sizeof时，可用可不用括号。
+```
+// limits.cpp -- some integer limits
+#include<iostream>
+#include<climits>
 
+int main()
+{
+    using namespace std;
+    int n_int = INT_MAX;
+    short n_short = SHRT_MAX;
+    long n_long = LONG_MAX;
+    long long n_llong = LLONG_MAX;
+
+    // sizeof operator yields size of type or of variable
+    cout << "int is " << sizeof(int) << " bytes." << endl;
+    cout << "short is " << sizeof n_short << " bytes." << endl;
+    cout << "long is " << sizeof n_long << " bytes." << endl;
+    cout << "long long is " << sizeof n_llong << " bytes." << endl;
+    cout << endl;
+
+    cout << "Maximum values:" << endl;
+    cout << "int: " << n_int << endl;
+    cout << "short: " << n_short << endl;
+    cout << "long: " << n_long << endl;
+    cout << "long long: " << n_llong << endl;
+
+    cout << "Maximum int value = " << INT_MIN << endl;
+    cout << "Bits per byte = " << CHAR_BIT << endl;
+    return 0;
+
+}
+
+在linux环境中运行脚本结果为：
+int is 4 bytes.
+short is 2 bytes.
+long is 8 bytes.
+long long is 8 bytes.
+
+Maximum values:
+int: 2147483647
+short: 32767
+long: 9223372036854775807
+long long: 9223372036854775807
+Maximum int value = -2147483648
+Bits per byte = 8
+```
+
+表3.1climits中的符号常量
+
+|符 号 常 量|表 示|
+|-|-|
+CHAR_BIT| char的位数
+CHAR_MAX| char的最大值
+CHAR_MIN| char的最小值
+SCHAR_MAX| signed char的最大值
+SCHAR_MIN| signed char的最小值
+UCHAR_MAX| unsigned char的最大值
+SHRT_MAX| short的最大值
+SHRT_MIN| short的最小值
+USHRT_MAX| unsigned short的最大值
+INT_MAX| int的最大值
+INT_MIN| int的最小值
+UNIT_MAX| unsigned int的最大值
+LONG_MAX| long的最大值
+LONG_MIN| long的最小值
+ULONG_MAX| unsigned long的最大值
+LLONG_MAX| long long的最大值
+LLONG_MIN| long long的最小值
+ULLONG_MAX| unsigned long long的最大值
