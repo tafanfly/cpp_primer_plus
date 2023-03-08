@@ -119,3 +119,69 @@ ULONG_MAX| unsigned long的最大值
 LLONG_MAX| long long的最大值
 LLONG_MIN| long long的最小值
 ULLONG_MAX| unsigned long long的最大值
+
+> 符号常量-预处理器方式
+在climits文件中包含下列类似的语句：
+
+**#define INT_MAX 32767**
+
+2. 初始化
+
+初始化将赋值和声明合并在一起, 如下语句，声明了变量n_int, 并将int的最大值赋值给它。
+
+int n_int = INT_MAX;
+
+
+#### 3.1.4 无符号类型
+无符号类型可以增大存储的最大值，当然要知道只有数值不为负数时才能使用无符号类型。
+
+```
+// exceed.cpp -- exceeding some integer limits
+#include <iostream>
+#include <climits>
+#define ZERO 0
+
+int main()
+{
+    using namespace std;
+    short short_max = SHRT_MAX;
+    short short_min = SHRT_MIN;
+    cout << "short_max: " << short_max << endl;
+    cout << "short_min: " << short_min << endl;
+
+    short_max = short_max + 1;
+    short_min = short_min + 1;
+
+    cout << "short_max plus one: " << short_max << endl;
+    cout << "short_min plus one: " << short_min << endl;
+
+    unsigned short unsigned_short_max = USHRT_MAX;
+    unsigned short unsigned_short_min = ZERO;
+    cout << "unsigned_short_max: " << unsigned_short_max << endl;
+    cout << "unsigned_short_min: " << unsigned_short_min << endl;
+
+    unsigned_short_max = unsigned_short_max - 1;
+    unsigned_short_min = unsigned_short_min - 1;
+
+    cout << "short_max minus one: " << unsigned_short_max << endl;
+    cout << "short_min minus one: " << unsigned_short_min << endl;
+    return 0;
+}
+
+结果：
+short_max: 32767
+short_min: -32768
+short_max plus one: -32768
+short_min plus one: -32767
+unsigned_short_max: 65535
+unsigned_short_min: 0
+short_max minus one: 65534
+short_min minus one: 65535
+```
+short 类型最大值是32767， 加上1后变成了-32768.
+unsigned shot类型最小值是0， 减去1后，变成了65535.
+这就是典型的`整型溢出行为`，超越了限制，其值将为范围另一端的取值。
+
+![典型的整型溢出行为](./picture/p3_1.png)
+
+
