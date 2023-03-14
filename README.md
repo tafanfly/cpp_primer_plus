@@ -137,16 +137,53 @@ LLONG_MIN| long long的最小值
 ULLONG_MAX| unsigned long long的最大值
 
 > 符号常量-预处理器方式
-在climits文件中包含下列类似的语句：
 
-**#define INT_MAX 32767**
-C++编译过程中，首先将源码传递给预处理器。该编译指令告诉预处理器，在程序中查找所有的INT_MAX， 并将所有的INT_MAX都替换成32767。
+在climits文件中包含下列类似的语句：**#define INT_MAX 32767**
+C++编译过程中，首先将源码传递给预处理器。该编译指令告诉预处理器，在程序中查找所有的INT_MAX， 并将所有的INT_MAX都替换32767。
 
 **初始化**
 
 初始化将赋值和声明合并在一起, 如下语句，声明了变量n_int, 并将int的最大值赋值给它。
+* int n_int = INT_MAX;
 
-int n_int = INT_MAX;
+C++还有另一种C语言没有的初始化语法:
+* int n_int(INT_MAX);
+
+还有一种用大括号初始化方式，适用于数组和结构，但是在C++98中可以单值变量。
+* int n_int = {INT_MAX};
+
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    int num = 5;
+    float time = num;
+    cout << "num is " << num << ", and time is " << time << endl;
+
+    int wrens(432);
+    cout << "wrens is " << wrens << endl;
+
+    int enus{7};
+    int rcs{};
+    cout << "enus is " << enus << endl;
+    cout << "rcs is " << rcs << endl;
+    int rheas = {12};
+    int roc = {};
+    cout << "rheas is " << rheas << endl;
+    cout << "roc is " << roc << endl;
+    return 0;
+}
+
+结果：
+num is 5, and time is 5
+wrens is 432
+enus is 7
+rcs is 0
+rheas is 12
+roc is 0
+```
 
 
 ### 3.1.4 无符号类型
@@ -212,7 +249,7 @@ unsigned shot类型最小值是0， 减去1后，变成了65535.
 
 ### 3.1.6 整型字面值
 
-C++ 中有3种方式来书写整型数值。
+C++ 中有3种方式来书写整型数值，但是不管把值写成何种基数，存储到计算机内都是二进制数。
 * 基数为10，第一位为1-9，例如93
 * 基数为8，第一位为0， 第二位为1-7，例如042
 * 基数为16， 第一位为0x或者0X，例如0x42
@@ -262,7 +299,7 @@ C++将整型常量存储为int类型， 除非用了特殊后缀。
 * ll 表示long long
 * ull 表示unsigned long long
 
-### 3.1.8 char类型
+### 3.1.8 char类型：字符和小整数
 
 
 ### 3.1.9 bool类型
