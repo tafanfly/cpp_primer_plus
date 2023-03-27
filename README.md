@@ -1,3 +1,5 @@
+# 目录
+
 # 第3章 处理数据
 OOP(面向对象编程)本质是设计并扩展自己的数据类型。要创建自己的数据类型，首先要了解C++的内置类型。
 
@@ -300,7 +302,112 @@ C++将整型常量存储为int类型， 除非用了特殊后缀。
 * ull 表示unsigned long long
 
 ### 3.1.8 char类型：字符和小整数
+char是另一种整型，很多系统支持的字符都不会超过128个，因此一个字节可以表示所有的符号，char常用来处理字符。
 
+最常用的字符集是ASCII码。
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    char ch;
+
+    cout << "Enter a character: " << endl;
+    cin >> ch;
+    cout << "The char is " << ch << endl;
+    return 0;
+}
+
+结果：
+Enter a character:
+M
+The char is M
+```
+为啥程序输入M，而不是对应的字符编码77呢？另外程序打印M，也不是77？
+* 输入时，cin将键盘输入的M转成77储存
+* 输出时，cout将值77转化成显示的字符M
+* cin和cout的行为都是由变量类型引导的
+
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    char ch = 'M';
+    int i = ch;
+    cout << "The ASCII code for " << ch << " is " << i << endl;
+
+    ch = ch + 1;
+    i = ch;
+    cout << "The ASCII code for " << ch << " is " << i << endl;
+
+    cout << "Displaying char ch using cout.put(ch): ";
+    cout.put(ch);
+
+    cout.put('!');
+    cout << endl << "Done!" << endl;
+    return 0;
+
+结果：
+The ASCII code for M is 77
+The ASCII code for N is 78
+Displaying char ch using cout.put(ch): N!
+Done!
+```
+* C++对`字符用单引号，对字符串使用双引号`
+* 变量ch初始化为'M'，存储的为对应的ASCII值77
+* 同样的值赋给int变量i，所以ch和id的值都是77
+* cout把ch显示为M，而把i显示为77
+* ch实际是一个整数，可以对头整数操作，比如+1，那么ch值为78
+* cout.put()是显示字符的另一种方法
+
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    char ch;
+    int n;
+    cout << "Enter a character: " << endl;
+    cin >> ch;
+    n = ch;
+    cout << "The char is " << ch << " and n is " << n << endl;
+
+    char ch1;
+    int n1;
+    cout << "Enter a num: " << endl;
+    cin >> n1;
+    ch1 = n1;
+    cout << "The char1 is " << ch1 << " and n1 is " << n1 <<endl;
+    return 0;
+}
+
+结果：
+Enter a character:
+7
+The char is 7 and n is 55
+Enter a num:
+7
+The char1 is  and n1 is 7
+```
+* ch是char变量，输入7，自动读取字符'7'， 转化编码55存储到变量ch中
+* n1是int变量，输入7， 自动将其转化为数字5，存储到变量n1中，char1是不可见字符
+
+```
+char fo
+unsigned char fo1  // 0-255
+signed char fo2    // -127-128
+```
+* char是否有符号由C++实现决定
+* 可以使用unsigned、signed来定义是否有符号
+
+wchar_t（宽字符类型）可以表示扩展字符集。
+C++11新增了类型char16_t和char32_t，其中前者是无符号的，长16位，而后者也是无符号的，但长32位。
+
+使用前缀u表示char16_t字符常量和字符串常量，如u‘C’和u“be good”；并使用前缀U表示char32_t常量，如U‘R’和U“dirty rat”。
 
 ### 3.1.9 bool类型
 C++将非零值解释为true，将零解释为false。然而，现在可以使用bool类型来表示真和假了。
@@ -456,18 +563,143 @@ hats / heads = 4.498657
 算术运算符遵循的优先级，先乘除，后加减。也可以使用括号来执行自
 己定义的优先级。
 
-> float logs = 120 / 4 * 5    // 150 ? 6
+> float logs = 120 / 4 * 5       // 150 ? 6
 
 当两个运算符作用于同一个操作数，且两个运算符的优先级相同时，C++将看操作数的结合性（associativity）是从左到右，还是从右到左来计算。
 
 乘除都是从左到右结合的，结果是150。
 
 ### 3.4.2 除法分支
+除法运算符（/）的行为取决于操作数的类型。
+```
+#include <iostream>
 
+int main()
+{
+    using namespace std;
+    cout.setf(ios_base::fixed, ios_base::floatfield);
+    cout << "Integer division: 9/5 = " << 9/5 << endl;
+    cout << "Floating-point division: 9.0/5.0 = " << 9.0/5.0 << endl;
+    cout << "Mixed division: 9.0/5 = " << 9.0/5 << endl;
+    cout << "Double constants: 1e7/9.0 = " << 1e7/9.0 << endl;
+    cout << "Float constants: 1e7f/9.0f = " << 1e7f/9.0f << endl;
+    return 0;
+}
+
+结果：
+Integer division: 9/5 = 1
+Floating-point division: 9.0/5.0 = 1.800000
+Mixed division: 9.0/5 = 1.800000
+Double constants: 1e7/9.0 = 1111111.111111
+Float constants: 1e7f/9.0f = 1111111.125000
+```
+* 两个操作数都是整数除法，结果小数被丢弃
+* 两个操作数至少一个浮点数除法，结果小数被保留
+* 两个操作数都是double类型，则结果为double类型（浮点常量默认double类型）
+* 两个操作数都是float类型，则结果为float类型
 
 ### 3.4.3 求模运算符
+求模运算符返回整数除法的余数。
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    const int lbs_per_stn = 14;
+    int lbs;
+
+    cout << "Enter your weight in pounds: ";
+    cin >> lbs;
+    int stone = lbs / lbs_per_stn; // whole stone
+    int pounds = lbs % lbs_per_stn; // remainder in pounds
+    cout << lbs << "pounds are " << stone << " stone, "
+         << pounds << " pound(s)." << endl;
+    return 0;
+}
+
+结果：
+Enter your weight in pounds: 181
+181pounds are 12 stone, 13 pound(s).
+```
+* 磅转换为英石函数，一英石等于14磅。
 
 ### 3.4.4 类型转换
+C++自动执行很多类型转换：
+* 将一种算术类型的值赋给另一种算术类型的变量时，C++将对值进
+行转换；
+* 表达式中包含不同的类型时，C++将对值进行转换；
+* 将参数传递给函数时，C++将对值进行转换。
+
+`1．初始化和赋值进行的转换`
+
+C++允许将一种类型的值赋给另一种类型的变量。这样做时，值将被转换为接收变量的类型。
+转换|潜在问题
+|-|-|
+将较大的浮点类型转换为较小的浮点类型，如将double转换为float|精度（有效数位）降低，值可能超出目标类型的取值范围，在这种情况下，结果将是不确定的
+将浮点类型转换为整型|小数部分丢失，原来的值可能超出目标类型的取值范围，在这种情况下，结果将是不确定的
+将较大的整型转换为较小的整型，如将long转换为short|原来的值可能超出目标类型的取值范围，通常只复制右边的字节
+
+**将0赋给bool变量时，将被转换为false；而非零值将被转换为true。**
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    cout.setf(ios_base::fixed, ios_base::floatfield);
+    float tree = 3;
+    int guess = 3.9832;
+    // int debt = 7.2E12;
+    cout << "tree = " << tree << endl;
+    cout << "guess = " << guess << endl;
+    // cout << "debt = " << debt << endl;
+    return 0;
+}
+
+result:
+tree = 3.000000
+guess = 3
+
+assign.cpp: In function ‘int main()’:
+assign.cpp:9:16: warning: overflow in implicit constant conversion [-Woverflow]
+     int debt = 7.2E12;
+```
+`2．以{ }方式初始化时进行的转换`
+`3．表达式中的转换`
+`4. 传递参数时的转换`
+`5．强制类型转换`
+
+```
+#include <iostream>
+
+int main()
+{
+    using namespace std;
+    int auks, bats, coots;
+    auks = 19.99 + 11.99;
+    bats = (int) 19.99 + (int) 11.99;
+    coots = int (19.99) + int (11.99);
+    cout << "auks = " << auks
+         << ", bats = " << bats
+         << ", coots = " << coots << endl;
+
+    char ch = 'Z';
+    cout << "The code for " << ch << " is " << int(ch) << endl;
+    cout << "Yes, the code is " << static_cast<int>(ch) << endl;
+
+    return 0;
+}
+
+result:
+auks = 31, bats = 30, coots = 30
+The code for Z is 90
+Yes, the code is 90
+```
+* auks： 19.99+11.99=31.98， 转换int变量时截短为31
+* bats/coots: 进行加法前使用强制转换时，两个操作数为19和11，相加为30
+* ch: 强制类型转换将char类型的值转换为int，再显示它
+
 
 ### 3.4.5 C++11中的auto声明
 auto是一个C语言关键字，让编译器能够根据初始值的类型推断变量的类型。
@@ -476,3 +708,48 @@ auto n = 100;     // n is int
 auto x = 1.5;     // x is double
 auto y = 1.3e12L  // y is long double
 ```
+
+## 3.5 总结
+C++的基本类型分为两组：一组由存储为整数的值组成，另一组由
+存储为浮点格式的值组成。整型之间通过存储值时使用的内存量及有无
+符号来区分。整型从最小到最大依次是：bool、char、signed char、
+unsigned char、short、unsigned short、int、unsigned int、long、unsigned long以及C++11新增的long long和unsigned long long。还有一种wchar_t类型，它在这个序列中的位置取决于实现。C++11新增了类型char16_t和char32_t，它们的宽度足以分别存储16和32位的字符编码。C++确保了char足够大，能够存储系统基本字符集中的任何成员，而wchar_t则可以存储系统扩展字符集中的任意成员，short至少为16位，而int至少与short一样长，long至少为32位，且至少和int一样长。确切的长度取决于实现。
+
+字符通过其数值编码来表示。I/O系统决定了编码是被解释为字符
+还是数字。
+
+浮点类型可以表示小数值以及比整型能够表示的值大得多的值。3
+种浮点类型分别是float、double和long double。C++确保float不比double长，而double不比long double长。通常，float使用32位内存，double使用64位，long double使用80到128位。
+
+通过提供各种长度不同、有符号或无符号的类型，C++使程序员能
+够根据特定的数据要求选择合适的类型。
+
+C++使用运算符来提供对数字类型的算术运算：加、减、乘、除和
+求模。当两个运算符对同一个操作数进行操作时，C++的优先级和结合
+性规则可以确定先执行哪种操作。
+
+对变量赋值、在运算中使用不同类型、使用强制类型转换时，
+C++将把值从一种类型转换为另一种类型。很多类型转换都是“安全
+的”，即可以在不损失和改变数据的情况下完成转换。例如，可以把int
+值转换为long值，而不会出现任何问题。对于其他一些转换，如将浮点
+类型转换为整型，则需要更加小心。
+
+## 3.6 复习题
+1. 为什么C++有多种整型？
+* 为了适合多种整型计算场景，例如long存储的数据范围就比int大。
+2. 声明与下述描述相符的变量
+```
+short n_short = 80;
+unsigned n_int = 42110;
+long n_long = 3000000000;
+```
+
+3. C++提供了什么措施来防止超出整型的范围？
+
+4. 33L与33之间有什么区别？
+* 一个是long int, 一个是int
+
+5. 下面两条C++语句是否等价？
+* 等价
+
+
