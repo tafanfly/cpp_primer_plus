@@ -38,7 +38,7 @@
 
 > short months[12];//声明创建一个months数组，共有12个元素，每个元素都是short类型的变量。
 
-可以通过下标或索引来单独访问数组元素，下标规定从0开始。
+可以通过`下标或索引来单独访问数组元素`，下标规定从0开始。
 **编译器不会检查使用的下标是否有效**，比如months[101]，编译也不会报错。
 ```
 #include <iostream>
@@ -46,20 +46,31 @@
 int main()
 {
     using namespace std;
-    int yams[3];
-    yams[0] = 7;
-    yams[1] = 8;
-    yams[2] = 6;
 
+    // 定义一个大小为 3 的整数数组 yams
+    int yams[3];
+    yams[0] = 7; // 初始化第一个元素
+    yams[1] = 8; // 初始化第二个元素
+    yams[2] = 6; // 初始化第三个元素
+
+    // 定义一个大小为 3 的整数数组 yamsconst，并进行初始化
     int yamsconst[3] = {20, 30, 5};
-    cout << "Total ymas = " << yams[0] + yams[1] + yams[2] << endl;
+
+    // 输出 yams 数组元素的总和
+    cout << "Total yams = " << yams[0] + yams[1] + yams[2] << endl;
+
+    // 输出 yams[1] 元素对应的成本
     cout << "The package with " << yams[1] << " yams costs "
          << yamsconst[1] << " cents per yam.\n";
 
+    // 计算 yams 数组所有元素对应的成本总和
     int total = yams[0] * yamsconst[0] + yams[1] * yamsconst[1];
     total = total + yams[2] * yamsconst[2];
+
+    // 输出 yams 数组所有元素对应的成本总和
     cout << "The total yam expense is " << total << " cents." << endl;
 
+    // 输出 yams 数组的字节长度和一个元素的字节长度
     cout << "\nSize of yams array = " << sizeof(yams)
          << " bytes.\n";
     cout << "Size of one element = " << sizeof(yams[0])
@@ -81,7 +92,7 @@ Size of one element = 4 bytes.
 C++允许在声明语句中初始化数组元素。
 
 `sizeof运算符`返回类型或数据对象的长度（单位为字节）
-* 将sizeof用于**数组名**，得到的将是整个数组中的字节数。
+* 将sizeof用于**数组名**，得到的将是整个数组的字节数。
 * 将sizeof用于**数组元素**，则得到的将是该元素的字节数。
 
 这表明yams是一个数组，而yams[1]只是一个int变量。
@@ -97,9 +108,10 @@ C++允许在声明语句中初始化数组元素。
 int cards[4] = {1, 2, 3, 4}; // okay
 int hand[4];                 // okay
 hand[0] = 5;                 // okay
-hand[4] = {5, 6, 7, 8};      // not allowed
-hand = cards;                // not allowed
+hand[4] = {5, 6, 7, 8};      // not allowed, 数组是一种特殊的数据类型，它在定义时需要为每个元素分配内存空间，所以只有在定义时才能进行初始化。
+hand = cards;                // not allowed, 数组名本身表示数组的首地址，是一个指针常量。在赋值时，数组名不能被赋值，因为它已经被定义为一个常量，不能被修改。
 ```
+
 
 * 初始化数组时，数组元素数目可以少于数组初始化的值，编译器将把其他元素设置为0。
 
@@ -107,7 +119,7 @@ int cards[4] = {1, 2}; 表示，cards[2]和cards[3]都是0.
 
 * 如果初始化数组方括号内为空，则C++编译器会去计算元素个数。
 
-short things[] = {1, 5, 3, 8}; 编译器使things数组包含4个元素。
+short things[] = {1, 5, 3, 8}; 编译器会根据初始化列表中的元素个数自动推导数组长度为4。
 
 ---
 
@@ -121,6 +133,19 @@ int cards[4] {1, 2, 3, 4};
 
 int cards[10] = {};
 
+* 列表初始化
+>int arr[] = {1, 2, 3, 4, 5};
+
+* 使用等号赋值
+```
+int arr[5];
+arr[0] = 1;
+arr[1] = 2;
+arr[2] = 3;
+arr[3] = 4;
+arr[4] = 5;
+```
+
 ---
 
 ## 4.2 字符串
@@ -133,15 +158,15 @@ int cards[10] = {};
 C 风格字符串以`空字符串结尾`，即以'\0'结尾。
 
 ```
-char dog[3] = {'a', 'b', 'c'}; // not a string
-char cat[3] = {'f', 'e', '\0'}; // a string
+char dog[3] = {'a', 'b', 'c'}; // 字符数组，但不是string
+char cat[3] = {'f', 'e', '\0'}; // 字符数组，是C风格string
 ```
 
 * 字符串常量，用双引号括起来, 用引号括起的字符串隐式地包括结尾的空字符。
 
 ```
-char bird[11] = "Mr. Cheeps";
-char fish[] = "Bubbles";
+char bird[11] = "Mr. Cheeps"; // 11个元素，10个字符加上一个 null 终止符
+char fish[] = "Bubbles"; // 6个字符加上一个 null 终止符
 ```
 
 C++对字符串长度没有限制，在确定存储字符串所需的最短数组时，别忘了将结尾的空字符计算在内。
@@ -155,7 +180,7 @@ C++对字符串长度没有限制，在确定存储字符串所需的最短数�
 
 字符常量'S'是字符串编码的简写表示，是83的一种写法。
 
-"S"表示的是两个字符（字符S和\0）组成的字符串，且表示的是字符串所在的`内存地址`。
+"S"表示的是两个字符（字符S和\0）组成的字符串，且表示的是字符串所在的`内存地址`，不能直接赋值给字符类型变量。
 
 ---
 
@@ -242,18 +267,13 @@ Here are the first 3 characters of my name: C++
 ```
 * sizeof 计算整个数组的长度，15个字节
 * strlen() 计算存储在数组中字符串的长度，计算不包含空字符
-* name1 输入的字符串长度不能超过 ??
+* name1 最多可以输入14个字符，因为最后一个字符要用来存储字符串的结束符'\0'。如果输入的字符串超过了 name1 数组的长度，cin >> 仍然可以将该字符串读取到 name1 数组中，但会导致数组越界，可能会破坏其他内存区域的数据或引发其他问题。
 
 ![使用\0截短字符串](./picture/p4_3.png)
 
 ---
 
 ### 4.2.3 字符串输入
-
-* cin使用空白（空格、制表符和换行符）来确定字符串的结束位置，这意味着cin在
-获取字符数组输入时只读取一个单词。读取该单词后，cin将该字符串放到数组中，并自动在结尾添加空字符。
-
-* cin把Alistair作为第一个字符串，并将它放到name数组中。这把Dreeb留在输入队列中。当cin在输入队列中搜索用户喜欢的甜点时，它发现了Dreeb，因此cin读取Dreeb，并将它放到dessert数组中。
 
 ```
 #include <iostream>
@@ -281,13 +301,21 @@ Enter your favorite dessert:
 I have some delicious Dreeb for you, Alistair.
 ```
 
----
+上述脚本会有2个问题：
+* cin 在遇到`空格、制表符或换行符`时会停止读取，而将剩余部分留在输入流中等待下一次读取。
+* cin 在读入字符串时，不会检查数组长度是否足够。如果读入的字符串长度超过数组长度，就会发生数组越界，导致程序崩溃或未定义行为
 
+结果解析：
+* cin使用空白（空格、制表符和换行符）来确定字符串的结束位置，这意味着cin在获取字符数组输入时只读取一个单词。读取该单词后，cin将该字符串放到数组中，并自动在结尾添加空字符。
+
+* cin把Alistair作为第一个字符串，并将它放到name数组中。这把Dreeb留在输入队列中。当cin在输入队列中搜索用户喜欢的甜点时，它发现了Dreeb，因此cin读取Dreeb，并将它放到dessert数组中。
+---
 ### 4.2.4 每次读取一行字符串输入
 
-面向行而不是面向单词的方法, 下面两个函数都是读取一行输入，直到到达换行符。
+面向行而不是面向单词的方法, 下面两个函数都是**读取一行输入，直到到达换行符**。
 
-* getline() 丢弃换行符，有两个参数，一个数组名，另一个读取字符数
+* getline() 函数读取整行，通过回车键输入的换行符来确定输
+入结尾。丢弃换行符，有两个参数，一个数组名，另一个读取字符数
 
 ```
 #include <iostream>
