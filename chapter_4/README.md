@@ -314,8 +314,7 @@ I have some delicious Dreeb for you, Alistair.
 
 面向行而不是面向单词的方法, 下面两个函数都是**读取一行输入，直到到达换行符**。
 
-* getline() 函数读取整行，通过回车键输入的换行符来确定输
-入结尾。丢弃换行符，有两个参数，一个数组名，另一个读取字符数
+1. getline() 函数读取整行，通过`回车键输入的换行符来确定输入结尾`。有两个参数，一个数组名，另一个读取字符数
 
 ```
 #include <iostream>
@@ -323,60 +322,103 @@ I have some delicious Dreeb for you, Alistair.
 int main()
 {
     using namespace std;
-    const int ArSize = 20;
+    const int ArSize = 6;
     char name[ArSize];
-    char dessert[ArSize];
+    char friut[ArSize];
 
     cout << "Enter your name:\n";
     cin.getline(name, ArSize);
-    cout << "Enter your favorite dessert:\n";
-    cin.getline(dessert, ArSize);
-    cout << "I have some delicious " << dessert;
+    cout << "Enter your favorite friut:\n";
+    cin.getline(friut, ArSize);
+    cout << "I have some delicious " << friut;
     cout << " for you, " << name << ".\n";
     return 0;
 }
 
-result:
+result1:
 Enter your name:
-Dirk Hamm
-Enter your favorite dessert:
-Rad home
-I have some delicious Rad home for you, Dirk Hamm.
+Tom
+Enter your favorite friut:
+apple
+I have some delicious apple for you, Tom.
+
+result2:
+Enter your name:
+Han meimei
+Enter your favorite friut:
+I have some delicious  for you, Han m.
+
+result3:
+Enter your name:
+Tom
+Enter your favorite friut:
+banana
+I have some delicious banan for you, Tom.
 ```
-* getline() 通过换行符来确定行尾，但不保存换行符，相反，在存储字符串时，用空字符来代替换行符。
+* getline() 成员函数在读取指定数目的字符或遇到换行符时停止读取。
+* 由result3可知，getline()读取的字符为 banan 和 换行符，在存储字符串时，用空字符来代替换行符。
 
-![getline( )读取并替换换行符](./picture/p4_5.png)
+![getline() 读取并替换换行符](./picture/p4_5.png)
 
-* get() 保留换行符
+2. get() 不再读取并丢弃换行符，而是将其留在输入队列中。
 
 >cin.get(name, ArSize);
-cin.get(dessert, ArSize);  // a problem
+cin.get(friut, ArSize);  // a problem
 
 第一次调用后，换行符留在输入列队中，因此第二次调用读取这个换行符，从而认为已经到达行尾，没有可读取的内容。
 
 get()有种变体，使用不带任何参数的cin.get()调用来读取下一个字符（即使是换行符）。
 
+另一种使用get( )的方式是将两个类成员函数拼接起来（合并）, 例如：
+
+cin.get(name, ArSize).get();
+
+由于cin.get（name，ArSize）返回一个cin对象，该对象随后调用get( )函数。那么cin.getline也可以用该方法。
+
+cin.getline(name, ArSize).cin.get(friut, ArSize);
+
 ```
 #include <iostream>
 
 int main()
 {
     using namespace std;
-    const int ArSize = 20;
+    const int ArSize = 6;
     char name[ArSize];
-    char dessert[ArSize];
+    char friut[ArSize];
 
     cout << "Enter your name:\n";
-    cin.get(name, ArSize);
-    cout << "Enter your favorite dessert:\n";
-    cin.get(dessert, ArSize);
-    cout << "I have some delicious " << dessert;
+    cin.get(name, ArSize).get();
+    cout << "Enter your favorite friut:\n";
+    cin.get(friut, ArSize).get();
+    cout << "I have some delicious " << friut;
     cout << " for you, " << name << ".\n";
     return 0;
 }
+
+result1:
+Enter your name:
+Tom
+Enter your favorite friut:
+apple
+I have some delicious apple for you, Tom.
+
+result2:
+Enter your name:
+Han meimei
+Enter your favorite friut:
+I have some delicious imei for you, Han m.
+
+result3:
+Enter your name:
+Tom
+Enter your favorite friut:
+banana
+I have some delicious banan for you, Tom.
 ```
 
 * 空行和其他问题
+>cin.clear()
 
 ### 4.2.5 混合输入字符串和数字
 ```
